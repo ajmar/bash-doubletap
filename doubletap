@@ -1,0 +1,27 @@
+#!/bin/env bash
+
+tmpFile="/tmp/.doubletap"
+
+if [ $# -eq 0 ]
+then
+	echo 'How to use: ./doubletap [maximum duration] [command]'
+elif [[ "$1" =~ '^[0-9]+([.][0-9]+)?$' ]]
+then
+	echo 'error: 1st argument must be a number (s).' >&2
+	exit 1
+fi
+
+if [ -e "$tmpFile" ]
+then
+	eval "${@:2}"
+	rm "$tmpFile"
+	exit
+else
+	touch "$tmpFile"
+	sleep "$1"
+	if [ -e "$tmpFile" ]
+	then
+		rm "$tmpFile"
+	fi
+	exit
+fi
